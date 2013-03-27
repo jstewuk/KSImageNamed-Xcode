@@ -9,7 +9,7 @@
 #import "KSImageNamedIndexCompletionItem.h"
 #import <objc/runtime.h>
 
-NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey = @"KSSIncludeDirectoryInImageCompletionDefaultKey";
+extern NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey;
 
 
 @interface KSImageNamedIndexCompletionItem () {
@@ -98,8 +98,19 @@ NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey = @"KSSIncludeDi
 }
 
 - (NSString *)directoryPath {
-    return [[NSUserDefaults standardUserDefaults] stringForKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
+    if ([self isDirectoryPathIncluded]) {
+        NSArray *pathComponents = [[self fileURL] pathComponents];
+        return pathComponents[[pathComponents count] - 2];
+    }
+    else
+        return nil;
 }
+
+- (BOOL)isDirectoryPathIncluded {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
+}
+
+        
 
 
 @end

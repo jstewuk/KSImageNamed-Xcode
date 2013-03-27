@@ -12,6 +12,9 @@
 #import "XcodeMisc.h"
 
 NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionInImageCompletion";
+NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey = @"KSSIncludeDirectoryInImageCompletionDefaultKey";
+NSString * const kAddDirectory = @"KSIImage: include directory";
+NSString * const kRemoveDirectory = @"KSIImage: remove directory";
 
 @interface KSImageNamed () {
     NSTimer *_updateTimer;
@@ -44,6 +47,7 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
     if ( (self = [super init]) ) {
         [self setImageCompletions:[NSMutableDictionary dictionary]];
         [self setIndexesToUpdate:[NSMutableSet set]];
+        [self addMenuItems];
     }
     return self;
 }
@@ -53,6 +57,47 @@ NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionI
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     [super dealloc];
+}
+
+-(void)addMenuItems {
+    if ([self isDirectoryIncluded]) {
+        [self addMenuItemWithTitle:kRemoveDirectory withAction:@selector(removeDirectory:)];
+    } else {
+        [self addMenuItemWithTitle:kAddDirectory withAction:@selector(addDirectory:)];
+    }
+}
+
+- (void)addDirectory:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self removeMenuWithTitle:kAddDirectory];
+    [self addMenuItemWithTitle:kRemoveDirectory withAction:@selector(removeDirectory:)];
+}
+
+- (void)removeDirectory:(id)sender {
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [self removeMenuWithTitle:kRemoveDirectory];
+    [self addMenuItemWithTitle:kAddDirectory withAction:@selector(removeDirectory:)];
+}
+
+- (void)addMenuItemWithTitle:(NSString*)title withAction:(SEL)action {
+    NSMenuItem *item = [[NSMenuItem alloc ] initWithTitle:title action:action keyEquivalent:@""];
+	[item setTarget:self];
+	[[self editMenu] addItem:item];
+}
+
+- (void)removeMenuWithTitle:(NSString*)title {
+    NSMenuItem *item = [[self editMenu] itemWithTitle:title];
+    [[self editMenu] removeItem:item];
+}
+
+- (NSMenu *)editMenu {
+    return [[[NSApp mainMenu] itemWithTitle:@"Edit"] submenu];
+}
+
+- (BOOL)isDirectoryIncluded {
+    return [[NSUserDefaults standardUserDefaults] boolForKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
 }
 
 - (KSImageNamedPreviewWindow *)imageWindow
