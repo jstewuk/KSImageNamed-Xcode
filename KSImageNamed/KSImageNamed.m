@@ -13,8 +13,8 @@
 
 NSString * const KSShowExtensionInImageCompletionDefaultKey = @"KSShowExtensionInImageCompletion";
 NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey = @"KSSIncludeDirectoryInImageCompletionDefaultKey";
-NSString * const kAddDirectory = @"KSIImage: include directory";
-NSString * const kRemoveDirectory = @"KSIImage: remove directory";
+NSString * const kAddDirectory = @"KSIImage: Include Directory";
+NSString * const kRemoveDirectory = @"KSIImage: Remove Directory";
 
 @interface KSImageNamed () {
     NSTimer *_updateTimer;
