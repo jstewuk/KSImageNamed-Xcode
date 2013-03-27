@@ -1,4 +1,4 @@
-# KSImageNamed-Xcode (forked) - adds folder reference support via defaults:
+# KSImageNamed-Xcode (forked) - adds folder reference support via Edit Menu:
 ---
 
 ## What is this?
@@ -22,14 +22,13 @@ Enter the following command \(in terminal\) and relaunch Xcode:
 
 ## How do I include a folder reference blue folders, instead of adding the directory path.   
 
-For example if I store my images in a directory called "Assets" within the project, and create a folder reference for that directory in the Xcode navigator \(blue folder\), and I don't want to have to keep adding "Assets/" to each file name?
+For example if I store my images in a directory called "Assets" within the project, and create a folder reference for that directory in the Xcode navigator \(blue folder\), and I don't want to have to keep adding "Assets/" to each file name?  
+If you used the via defaults approach, first in terminal:  
+`defaults delete com.apple.dt.Xcode KSSIncludeDirectoryInImageCompletionDefaultKey`  
+Then, in the Xcode Edit Menu, select KSIImage: Include Directory.
 
-Enter the following command \(in terminal\) and relaunch Xcode:  
-`defaults write com.apple.dt.Xcode KSSIncludeDirectoryInImageCompletionDefaultKey -string "Assets"`
+To turn this off again in the Xcode Edit menu, select KSIIMage: Remove Directory.
 
-To turn this off enter the following \(in terminal\) and relaunch Xcode:
-
-`defaults delete com.apple.dt.Xcode KSSIncludeDirectoryInImageCompletionDefaultKey`
 
 ## Possible future improvements
 
