@@ -9,6 +9,9 @@
 #import "KSImageNamedIndexCompletionItem.h"
 #import <objc/runtime.h>
 
+NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey = @"KSSIncludeDirectoryInImageCompletionDefaultKey";
+
+
 @interface KSImageNamedIndexCompletionItem () {
     NSString *_imageCompletionText;
     BOOL _imageIncludeExtension;
@@ -71,8 +74,9 @@
 - (NSString *)displayText
 {
     NSString *displayFormat = [self has2x] ? @"%@ (%@, 2x)" : @"%@ (%@)";
+    NSString *string =[NSString stringWithFormat:displayFormat, [self _imageNamedText], [[self fileURL] pathExtension]];
     
-    return [NSString stringWithFormat:displayFormat, [self _imageNamedText], [[self fileURL] pathExtension]];
+    return string;
 }
 
 - (NSString *)_fileName
@@ -88,7 +92,14 @@
 
 - (NSString *)_imageNamedText
 {
-    return [NSString stringWithFormat:@"@\"%@\"", [self _fileName]];
+    NSString *directory = [self directoryPath];
+    directory = [directory length]? [directory stringByAppendingString:@"/"]: @"";
+    return [NSString stringWithFormat:@"@\"%@%@\"", directory, [self _fileName]];
 }
+
+- (NSString *)directoryPath {
+    return [[NSUserDefaults standardUserDefaults] stringForKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
+}
+
 
 @end
