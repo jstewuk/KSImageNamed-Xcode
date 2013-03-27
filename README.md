@@ -1,4 +1,4 @@
-# KSImageNamed-Xcode
+# KSImageNamed-Xcode (forked) - adds folder reference support via defaults:
 ---
 
 ## What is this?
@@ -17,8 +17,19 @@ Developed and tested against Xcode 4.5.2 on 10.8. Also appears to work with Xcod
 
 ## How do I include file extensions when autocompleting?
 
-Enter the following command and relaunch Xcode:  
+Enter the following command \(in terminal\) and relaunch Xcode:  
 `defaults write com.apple.dt.Xcode KSShowExtensionInImageCompletion -bool YES`
+
+## How do I include a folder reference blue folders, instead of adding the directory path.   
+
+For example if I store my images in a directory called "Assets" within the project, and create a folder reference for that directory in the Xcode navigator \(blue folder\), and I don't want to have to keep adding "Assets/" to each file name?
+
+Enter the following command \(in terminal\) and relaunch Xcode:  
+`defaults write com.apple.dt.Xcode KSSIncludeDirectoryInImageCompletionDefaultKey -string "Assets"`
+
+To turn this off enter the following \(in terminal\) and relaunch Xcode:
+
+`defaults delete com.apple.dt.Xcode KSSIncludeDirectoryInImageCompletionDefaultKey`
 
 ## Possible future improvements
 
