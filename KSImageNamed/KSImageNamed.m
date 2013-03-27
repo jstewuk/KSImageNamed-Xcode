@@ -19,6 +19,7 @@ NSString * const kRemoveDirectory = @"KSIImage: Remove Directory";
 @interface KSImageNamed () {
     NSTimer *_updateTimer;
     KSImageNamedPreviewWindow *_imageWindow;
+    NSMenuItem *_menuItem;
 }
 @property(nonatomic, strong) NSMutableDictionary *imageCompletions;
 @property(nonatomic, strong) NSMutableSet *indexesToUpdate;
@@ -69,27 +70,25 @@ NSString * const kRemoveDirectory = @"KSIImage: Remove Directory";
 
 - (void)addDirectory:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [self removeMenuWithTitle:kAddDirectory];
+    //[[NSUserDefaults standardUserDefaults] synchronize];
     [self addMenuItemWithTitle:kRemoveDirectory withAction:@selector(removeDirectory:)];
 }
 
 - (void)removeDirectory:(id)sender {
     [[NSUserDefaults standardUserDefaults] setBool:NO forKey:KSSIncludeDirectoryInImageCompletionDefaultKey];
-    [[NSUserDefaults standardUserDefaults] synchronize];
-    [self removeMenuWithTitle:kRemoveDirectory];
-    [self addMenuItemWithTitle:kAddDirectory withAction:@selector(removeDirectory:)];
+    //[[NSUserDefaults standardUserDefaults] synchronize];
+    [self addMenuItemWithTitle:kAddDirectory withAction:@selector(addDirectory:)];
 }
 
 - (void)addMenuItemWithTitle:(NSString*)title withAction:(SEL)action {
-    NSMenuItem *item = [[NSMenuItem alloc ] initWithTitle:title action:action keyEquivalent:@""];
-	[item setTarget:self];
-	[[self editMenu] addItem:item];
-}
-
-- (void)removeMenuWithTitle:(NSString*)title {
-    NSMenuItem *item = [[self editMenu] itemWithTitle:title];
-    [[self editMenu] removeItem:item];
+    if (_menuItem == nil) {
+        _menuItem = [[NSMenuItem alloc ] initWithTitle:title action:action keyEquivalent:@""];
+        [_menuItem setTarget:self];
+        [[self editMenu] addItem:_menuItem];
+    } else {
+        [_menuItem setTitle:title];
+        [_menuItem setAction:action];
+    }
 }
 
 - (NSMenu *)editMenu {

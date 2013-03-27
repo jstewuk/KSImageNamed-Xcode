@@ -63,7 +63,8 @@ extern NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey;
 
 - (NSString *)completionText
 {
-    return _imageCompletionText;
+    //return _imageCompletionText;
+    return [self _imageNamedText];
 }
 
 - (NSString *)displayType
@@ -92,18 +93,16 @@ extern NSString * const KSSIncludeDirectoryInImageCompletionDefaultKey;
 
 - (NSString *)_imageNamedText
 {
-    NSString *directory = [self directoryPath];
-    directory = [directory length]? [directory stringByAppendingString:@"/"]: @"";
+    NSString *directory = @"";
+    if ([self isDirectoryPathIncluded]) {
+        directory = [[self directoryPath] stringByAppendingString:@"/"];
+    }
     return [NSString stringWithFormat:@"@\"%@%@\"", directory, [self _fileName]];
 }
 
 - (NSString *)directoryPath {
-    if ([self isDirectoryPathIncluded]) {
-        NSArray *pathComponents = [[self fileURL] pathComponents];
-        return pathComponents[[pathComponents count] - 2];
-    }
-    else
-        return nil;
+    NSArray *pathComponents = [[self fileURL] pathComponents];
+    return pathComponents[[pathComponents count] - 2];
 }
 
 - (BOOL)isDirectoryPathIncluded {
